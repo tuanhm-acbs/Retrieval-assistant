@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#111827" />
+  <title>Retrieval Chain Trainer</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div>
+        <h1>Retrieval Chain Trainer</h1>
+        <p>Turn articles into active English recall practice.</p>
+      </div>
+      <button id="themeBtn" class="icon-btn" aria-label="Toggle theme">◐</button>
+    </header>
+
+    <nav class="tabs" aria-label="Main navigation">
+      <button class="tab active" data-screen="setupScreen">Setup</button>
+      <button class="tab" data-screen="practiceScreen">Practice</button>
+      <button class="tab" data-screen="progressScreen">Progress</button>
+    </nav>
+
+    <main>
+      <section id="setupScreen" class="screen active">
+        <div class="card">
+          <h2>1. Use your Custom GPT</h2>
+          <p class="muted">Paste your article into ChatGPT / Custom GPT, ask it to create Retrieval Pack JSON, then paste that JSON below.</p>
+          <button id="copyPromptBtn" class="primary">Copy Custom GPT Prompt</button>
+          <details>
+            <summary>Show required JSON format</summary>
+            <pre id="jsonFormat"></pre>
+          </details>
+        </div>
+
+        <div class="card">
+          <h2>2. Paste Retrieval Pack JSON</h2>
+          <textarea id="jsonInput" placeholder='Paste JSON here, then tap Load Pack...'></textarea>
+          <div class="row">
+            <button id="loadPackBtn" class="primary">Load Pack</button>
+            <button id="sampleBtn" class="secondary">Load Sample</button>
+            <button id="clearDataBtn" class="danger">Clear Data</button>
+          </div>
+          <p id="loadStatus" class="status"></p>
+        </div>
+
+        <div id="packPreview" class="card hidden">
+          <h2>Pack Preview</h2>
+          <div class="stats-grid">
+            <div><strong id="statTitle">-</strong><span>Title</span></div>
+            <div><strong id="statChains">0</strong><span>Chains</span></div>
+            <div><strong id="statCollocations">0</strong><span>Collocations</span></div>
+            <div><strong id="statQuestions">0</strong><span>Questions</span></div>
+          </div>
+          <button id="startBtn" class="primary full">Start Practice</button>
+        </div>
+      </section>
+
+      <section id="practiceScreen" class="screen">
+        <div id="noPack" class="card">
+          <h2>No pack loaded</h2>
+          <p class="muted">Go to Setup and load a Retrieval Pack JSON first.</p>
+        </div>
+
+        <div id="practiceArea" class="hidden">
+          <div class="practice-header card compact">
+            <div>
+              <div id="modeLabel" class="badge">Chain Recall</div>
+              <h2 id="promptTitle">Prompt</h2>
+              <p id="promptText" class="muted"></p>
+            </div>
+            <div class="score-pill"><span id="currentIndex">1</span>/<span id="totalItems">1</span></div>
+          </div>
+
+          <div class="mode-buttons">
+            <button class="mode active" data-mode="chains">Chains</button>
+            <button class="mode" data-mode="collocations">Collocations</button>
+            <button class="mode" data-mode="why">Why</button>
+            <button class="mode" data-mode="how">How</button>
+            <button class="mode" data-mode="speaking">Speaking</button>
+            <button class="mode" data-mode="summary">Summary</button>
+          </div>
+
+          <div class="card">
+            <div id="answerFields"></div>
+            <textarea id="longAnswer" class="hidden" placeholder="Write or speak, then type your answer here..."></textarea>
+            <div id="feedback" class="feedback hidden"></div>
+            <div class="row sticky-actions">
+              <button id="clearCheckBtn" class="primary">Clear</button>
+              <button id="showBtn" class="secondary">Show Answer</button>
+              <button id="nextBtn" class="secondary">Next</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="progressScreen" class="screen">
+        <div class="card">
+          <h2>Progress</h2>
+          <div class="stats-grid">
+            <div><strong id="doneCount">0</strong><span>Checked</span></div>
+            <div><strong id="rightCount">0</strong><span>Correct</span></div>
+            <div><strong id="wrongCount">0</strong><span>Need review</span></div>
+            <div><strong id="accuracy">0%</strong><span>Accuracy</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Wrong / Weak Items</h2>
+          <div id="wrongList" class="wrong-list muted">No weak items yet.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
