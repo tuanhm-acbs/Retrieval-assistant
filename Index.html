@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<title>Retrieval Trainer</title>
+
+<link rel="stylesheet" href="styles.css">
+
+<meta name="theme-color" content="#111827">
+</head>
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+        <h1>Retrieval Trainer</h1>
+        <p class="subtitle">
+            Turn articles into speaking & writing retrieval practice
+        </p>
+    </header>
+
+    <!-- HOME SCREEN -->
+    <section id="homeScreen" class="screen active">
+
+        <div class="card">
+
+            <h2>Load Retrieval Pack</h2>
+
+            <p>
+                Paste JSON generated from your Custom GPT.
+            </p>
+
+            <textarea
+                id="jsonInput"
+                placeholder="Paste Retrieval Pack JSON here..."
+            ></textarea>
+
+            <button id="loadPackBtn" class="btn primary">
+                Load Pack
+            </button>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Sample Format</h2>
+
+<pre>
+{
+  "title":"Eco-Friendly Living",
+  "chains":[
+    {
+      "concept":"Recycling",
+      "steps":[
+        "less waste",
+        "less pollution",
+        "cleaner environment"
+      ]
+    }
+  ],
+  "collocations":[
+    {
+      "meaning":"Reduce pollution",
+      "phrase":"reduce emissions"
+    }
+  ],
+  "why_questions":[
+    {
+      "question":"Why is recycling important?",
+      "answer":"Recycling reduces waste and pollution, which helps create a cleaner environment."
+    }
+  ],
+  "how_questions":[
+    {
+      "question":"How do plants improve air quality?",
+      "answer":"Plants absorb carbon dioxide and produce oxygen, which improves air quality."
+    }
+  ]
+}
+</pre>
+
+        </div>
+
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="dashboardScreen" class="screen">
+
+        <div class="card">
+
+            <h2 id="packTitle">
+                Retrieval Pack
+            </h2>
+
+            <div class="stats">
+
+                <div class="stat">
+                    <span id="chainCount">0</span>
+                    <small>Chains</small>
+                </div>
+
+                <div class="stat">
+                    <span id="collocationCount">0</span>
+                    <small>Collocations</small>
+                </div>
+
+                <div class="stat">
+                    <span id="questionCount">0</span>
+                    <small>Questions</small>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Practice Modes</h3>
+
+            <button class="btn modeBtn" data-mode="chains">
+                Chain Recall
+            </button>
+
+            <button class="btn modeBtn" data-mode="collocations">
+                Collocation Recall
+            </button>
+
+            <button class="btn modeBtn" data-mode="why">
+                Why Questions
+            </button>
+
+            <button class="btn modeBtn" data-mode="how">
+                How Questions
+            </button>
+
+            <button class="btn modeBtn" data-mode="summary">
+                Summary Recall
+            </button>
+
+            <button class="btn modeBtn" data-mode="review">
+                Review Wrong Answers
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- CHAIN MODE -->
+    <section id="chainScreen" class="screen">
+
+        <div class="card">
+
+            <div class="modeHeader">
+
+                <button class="backBtn">
+                    ← Back
+                </button>
+
+                <h2>
+                    Chain Recall
+                </h2>
+
+            </div>
+
+            <div class="progress">
+                <span id="chainProgress">
+                    1 / 10
+                </span>
+            </div>
+
+            <h3 id="chainConcept">
+                Concept
+            </h3>
+
+            <div id="chainInputs">
+
+            </div>
+
+            <div class="actionRow">
+
+                <button id="chainCheckBtn" class="btn success">
+                    Check
+                </button>
+
+                <button id="chainShowBtn" class="btn secondary">
+                    Show
+                </button>
+
+            </div>
+
+            <button id="chainNextBtn" class="btn primary full">
+                Next
+            </button>
+
+            <div id="chainFeedback" class="feedback">
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- COLLOCATION MODE -->
+    <section id="collocationScreen" class="screen">
+
+        <div class="card">
+
+            <div class="modeHeader">
+
+                <button class="backBtn">
+                    ← Back
+                </button>
+
+                <h2>
+                    Collocation Recall
+                </h2>
+
+            </div>
+
+            <div class="progress">
+                <span id="collocationProgress">
+                    1 / 10
+                </span>
+            </div>
+
+            <h3>
+                Meaning
+            </h3>
+
+            <p id="collocationMeaning">
+                Meaning here
+            </p>
+
+            <input
+                id="collocationAnswer"
+                type="text"
+                placeholder="Type phrase..."
+            >
+
+            <div class="actionRow">
+
+                <button id="collocationCheckBtn" class="btn success">
+                    Check
+                </button>
+
+                <button id="collocationShowBtn" class="btn secondary">
+                    Show
+                </button>
+
+            </div>
+
+            <button id="collocationNextBtn" class="btn primary full">
+                Next
+            </button>
+
+            <div id="collocationFeedback" class="feedback">
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- WHY MODE -->
+    <section id="whyScreen" class="screen">
+
+        <div class="card">
+
+            <div class="modeHeader">
+
+                <button class="backBtn">
+                    ← Back
+                </button>
+
+                <h2>
+                    Why Questions
+                </h2>
+
+            </div>
+
+            <div class="questionBox">
+
+                <h3 id="whyQuestion">
+                    Why question
+                </h3>
+
+            </div>
+
+            <textarea
+                id="whyAnswer"
+                placeholder="Type your answer..."
+            ></textarea>
+
+            <button id="whyCheckBtn" class="btn success full">
+                Check
+            </button>
+
+            <button id="whyNextBtn" class="btn primary full">
+                Next
+            </button>
+
+            <div id="whyFeedback" class="feedback">
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- HOW MODE -->
+    <section id="howScreen" class="screen">
+
+        <div class="card">
+
+            <div class="modeHeader">
+
+                <button class="backBtn">
+                    ← Back
+                </button>
+
+                <h2>
+                    How Questions
+                </h2>
+
+            </div>
+
+            <div class="questionBox">
+
+                <h3 id="howQuestion">
+                    How question
+                </h3>
+
+            </div>
+
+            <textarea
+                id="howAnswer"
+                placeholder="Type your answer..."
+            ></textarea>
+
+            <button id="howCheckBtn" class="btn success full">
+                Check
+            </button>
+
+            <button id="howNextBtn" class="btn primary full">
+                Next
+            </button>
+
+            <div id="howFeedback" class="feedback">
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SUMMARY MODE -->
+    <section id="summaryScreen" class="screen">
+
+        <div class="card">
+
+            <div class="modeHeader">
+
+                <button class="backBtn">
+                    ← Back
+                </button>
+
+                <h2>
+                    Summary Recall
+                </h2>
+
+            </div>
+
+            <p>
+                Write a summary from memory.
+            </p>
+
+            <textarea
+                id="summaryText"
+                class="summaryBox"
+                placeholder="Write your summary..."
+            ></textarea>
+
+            <div class="summaryStats">
+
+                <span id="wordCount">
+                    0 words
+                </span>
+
+            </div>
+
+            <button id="saveSummaryBtn" class="btn primary full">
+                Save Summary
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- REVIEW SCREEN -->
+    <section id="reviewScreen" class="screen">
+
+        <div class="card">
+
+            <div class="modeHeader">
+
+                <button class="backBtn">
+                    ← Back
+                </button>
+
+                <h2>
+                    Review
+                </h2>
+
+            </div>
+
+            <div id="scoreArea">
+
+                <h3>
+                    Your Progress
+                </h3>
+
+                <div id="scoreContent">
+
+                </div>
+
+            </div>
+
+            <button id="retryWrongBtn" class="btn warning full">
+                Retry Wrong Answers
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
