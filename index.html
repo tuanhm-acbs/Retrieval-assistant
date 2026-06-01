@@ -1,118 +1,162 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#111827" />
-  <title>Retrieval Chain Trainer</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Retrieval Trainer V2</title>
   <link rel="stylesheet" href="styles.css" />
+  <meta name="theme-color" content="#0f172a" />
 </head>
 <body>
   <div class="app">
-    <header class="topbar">
+    <header class="header">
       <div>
-        <h1>Retrieval Chain Trainer</h1>
-        <p>Turn articles into active English recall practice.</p>
+        <h1>Retrieval Trainer</h1>
+        <p class="subtitle">Turn articles into active English retrieval practice</p>
       </div>
-      <button id="themeBtn" class="icon-btn" aria-label="Toggle theme">◐</button>
+      <button id="homeBtn" class="iconBtn" title="Home">⌂</button>
     </header>
 
-    <nav class="tabs" aria-label="Main navigation">
-      <button class="tab active" data-screen="setupScreen">Setup</button>
-      <button class="tab" data-screen="practiceScreen">Practice</button>
-      <button class="tab" data-screen="progressScreen">Progress</button>
-    </nav>
+    <section id="homeScreen" class="screen active">
+      <div class="card hero">
+        <h2>Load Retrieval Pack JSON</h2>
+        <p>Use your Custom GPT to convert an article into JSON, paste it here, choose a topic, then save it to your library.</p>
+        <textarea id="jsonInput" placeholder="Paste Retrieval Pack JSON here..."></textarea>
+        <label class="label" for="topicSelect">Topic Library</label>
+        <select id="topicSelect">
+          <option value="Environment">Environment</option>
+          <option value="Education">Education</option>
+          <option value="Technology">Technology</option>
+          <option value="Health">Health</option>
+          <option value="Work and Careers">Work and Careers</option>
+          <option value="Urbanization">Urbanization</option>
+          <option value="History">History</option>
+          <option value="Ethics">Ethics</option>
+          <option value="Public Behavior">Public Behavior</option>
+          <option value="Social Problems">Social Problems</option>
+          <option value="Equality">Equality</option>
+          <option value="Economy">Economy</option>
+          <option value="General">General</option>
+        </select>
+        <button id="loadPackBtn" class="btn primary">Save Pack & Start</button>
+        <button id="sampleBtn" class="btn secondary">Load Sample Pack</button>
+      </div>
 
-    <main>
-      <section id="setupScreen" class="screen active">
-        <div class="card">
-          <h2>1. Use your Custom GPT</h2>
-          <p class="muted">Paste your article into ChatGPT / Custom GPT, ask it to create Retrieval Pack JSON, then paste that JSON below.</p>
-          <button id="copyPromptBtn" class="primary">Copy Custom GPT Prompt</button>
-          <details>
-            <summary>Show required JSON format</summary>
-            <pre id="jsonFormat"></pre>
-          </details>
+      <div class="card">
+        <div class="sectionTitleRow">
+          <h2>My Pack Library</h2>
+          <button id="clearLibraryBtn" class="smallBtn dangerText">Clear</button>
         </div>
+        <div id="topicFilterRow" class="topicChips"></div>
+        <div id="libraryList"></div>
+      </div>
 
-        <div class="card">
-          <h2>2. Paste Retrieval Pack JSON</h2>
-          <textarea id="jsonInput" placeholder='Paste JSON here, then tap Load Pack...'></textarea>
-          <div class="row">
-            <button id="loadPackBtn" class="primary">Load Pack</button>
-            <button id="sampleBtn" class="secondary">Load Sample</button>
-            <button id="clearDataBtn" class="danger">Clear Data</button>
-          </div>
-          <p id="loadStatus" class="status"></p>
+      <div class="card mutedCard">
+        <h3>Custom GPT Prompt</h3>
+        <p>Copy this prompt into your Custom GPT after pasting an article.</p>
+        <button id="copyPromptBtn" class="btn secondary">Copy Prompt</button>
+      </div>
+    </section>
+
+    <section id="dashboardScreen" class="screen">
+      <div class="card">
+        <button class="backBtn" data-back="homeScreen">← Library</button>
+        <h2 id="packTitle">Retrieval Pack</h2>
+        <p id="packTopic" class="subtitle"></p>
+        <div class="stats">
+          <div class="stat"><span id="chainCount">0</span><small>Chains</small></div>
+          <div class="stat"><span id="collocationCount">0</span><small>Collocations</small></div>
+          <div class="stat"><span id="questionCount">0</span><small>Questions</small></div>
         </div>
+      </div>
 
-        <div id="packPreview" class="card hidden">
-          <h2>Pack Preview</h2>
-          <div class="stats-grid">
-            <div><strong id="statTitle">-</strong><span>Title</span></div>
-            <div><strong id="statChains">0</strong><span>Chains</span></div>
-            <div><strong id="statCollocations">0</strong><span>Collocations</span></div>
-            <div><strong id="statQuestions">0</strong><span>Questions</span></div>
-          </div>
-          <button id="startBtn" class="primary full">Start Practice</button>
-        </div>
-      </section>
+      <div class="card">
+        <h3>Practice Modes</h3>
+        <button class="btn modeBtn" data-mode="chains">Chain Recall</button>
+        <button class="btn modeBtn" data-mode="collocations">Collocation Recall</button>
+        <button class="btn modeBtn" data-mode="why">Why Questions</button>
+        <button class="btn modeBtn" data-mode="how">How Questions</button>
+        <button class="btn modeBtn" data-mode="summary">Summary Recall</button>
+        <button class="btn modeBtn" data-mode="review">Review Wrong Answers</button>
+      </div>
 
-      <section id="practiceScreen" class="screen">
-        <div id="noPack" class="card">
-          <h2>No pack loaded</h2>
-          <p class="muted">Go to Setup and load a Retrieval Pack JSON first.</p>
-        </div>
+      <div class="card">
+        <h3>Progress</h3>
+        <div id="scoreContent" class="scoreGrid"></div>
+      </div>
+    </section>
 
-        <div id="practiceArea" class="hidden">
-          <div class="practice-header card compact">
-            <div>
-              <div id="modeLabel" class="badge">Chain Recall</div>
-              <h2 id="promptTitle">Prompt</h2>
-              <p id="promptText" class="muted"></p>
-            </div>
-            <div class="score-pill"><span id="currentIndex">1</span>/<span id="totalItems">1</span></div>
-          </div>
+    <section id="chainScreen" class="screen">
+      <div class="card practiceCard">
+        <div class="modeHeader"><button class="backBtn" data-back="dashboardScreen">← Back</button><h2>Chain Recall</h2></div>
+        <div class="progress"><span id="chainProgress">1 / 1</span></div>
+        <h3 id="chainConcept">Concept</h3>
+        <p id="chainHint" class="hint"></p>
+        <div id="chainInputs"></div>
+        <div class="actionRow"><button id="chainCheckBtn" class="btn success">Check</button><button id="chainShowBtn" class="btn secondary">Show</button></div>
+        <button id="chainNextBtn" class="btn primary full">Next</button>
+        <div id="chainFeedback" class="feedback"></div>
+      </div>
+    </section>
 
-          <div class="mode-buttons">
-            <button class="mode active" data-mode="chains">Chains</button>
-            <button class="mode" data-mode="collocations">Collocations</button>
-            <button class="mode" data-mode="why">Why</button>
-            <button class="mode" data-mode="how">How</button>
-            <button class="mode" data-mode="speaking">Speaking</button>
-            <button class="mode" data-mode="summary">Summary</button>
-          </div>
+    <section id="collocationScreen" class="screen">
+      <div class="card practiceCard">
+        <div class="modeHeader"><button class="backBtn" data-back="dashboardScreen">← Back</button><h2>Collocation Recall</h2></div>
+        <div class="progress"><span id="collocationProgress">1 / 1</span></div>
+        <h3>Meaning / Cue</h3>
+        <p id="collocationMeaning" class="questionText"></p>
+        <input id="collocationAnswer" type="text" placeholder="Type phrase..." autocomplete="off" />
+        <div class="actionRow"><button id="collocationCheckBtn" class="btn success">Check</button><button id="collocationShowBtn" class="btn secondary">Show</button></div>
+        <button id="collocationNextBtn" class="btn primary full">Next</button>
+        <div id="collocationFeedback" class="feedback"></div>
+      </div>
+    </section>
 
-          <div class="card">
-            <div id="answerFields"></div>
-            <textarea id="longAnswer" class="hidden" placeholder="Write or speak, then type your answer here..."></textarea>
-            <div id="feedback" class="feedback hidden"></div>
-            <div class="row sticky-actions">
-              <button id="clearCheckBtn" class="primary">Clear</button>
-              <button id="showBtn" class="secondary">Show Answer</button>
-              <button id="nextBtn" class="secondary">Next</button>
-            </div>
-          </div>
-        </div>
-      </section>
+    <section id="whyScreen" class="screen">
+      <div class="card practiceCard">
+        <div class="modeHeader"><button class="backBtn" data-back="dashboardScreen">← Back</button><h2>Why Questions</h2></div>
+        <div class="progress"><span id="whyProgress">1 / 1</span></div>
+        <div class="questionBox"><h3 id="whyQuestion">Why?</h3></div>
+        <textarea id="whyAnswer" placeholder="Type your answer from memory..."></textarea>
+        <button id="whyCheckBtn" class="btn success full">Check</button>
+        <button id="whyShowBtn" class="btn secondary full">Show Expected Logic</button>
+        <button id="whyNextBtn" class="btn primary full">Next</button>
+        <div id="whyFeedback" class="feedback"></div>
+      </div>
+    </section>
 
-      <section id="progressScreen" class="screen">
-        <div class="card">
-          <h2>Progress</h2>
-          <div class="stats-grid">
-            <div><strong id="doneCount">0</strong><span>Checked</span></div>
-            <div><strong id="rightCount">0</strong><span>Correct</span></div>
-            <div><strong id="wrongCount">0</strong><span>Need review</span></div>
-            <div><strong id="accuracy">0%</strong><span>Accuracy</span></div>
-          </div>
-        </div>
+    <section id="howScreen" class="screen">
+      <div class="card practiceCard">
+        <div class="modeHeader"><button class="backBtn" data-back="dashboardScreen">← Back</button><h2>How Questions</h2></div>
+        <div class="progress"><span id="howProgress">1 / 1</span></div>
+        <div class="questionBox"><h3 id="howQuestion">How?</h3></div>
+        <textarea id="howAnswer" placeholder="Type your answer from memory..."></textarea>
+        <button id="howCheckBtn" class="btn success full">Check</button>
+        <button id="howShowBtn" class="btn secondary full">Show Expected Logic</button>
+        <button id="howNextBtn" class="btn primary full">Next</button>
+        <div id="howFeedback" class="feedback"></div>
+      </div>
+    </section>
 
-        <div class="card">
-          <h2>Wrong / Weak Items</h2>
-          <div id="wrongList" class="wrong-list muted">No weak items yet.</div>
-        </div>
-      </section>
-    </main>
+    <section id="summaryScreen" class="screen">
+      <div class="card practiceCard">
+        <div class="modeHeader"><button class="backBtn" data-back="dashboardScreen">← Back</button><h2>Summary Recall</h2></div>
+        <p id="summaryPrompt">Write a 100-word summary from memory.</p>
+        <textarea id="summaryText" class="summaryBox" placeholder="Write your summary..."></textarea>
+        <div class="summaryStats"><span id="wordCount">0 words</span></div>
+        <button id="saveSummaryBtn" class="btn primary full">Save Summary</button>
+        <div id="summaryFeedback" class="feedback"></div>
+      </div>
+    </section>
+
+    <section id="reviewScreen" class="screen">
+      <div class="card practiceCard">
+        <div class="modeHeader"><button class="backBtn" data-back="dashboardScreen">← Back</button><h2>Review Wrong Answers</h2></div>
+        <div id="wrongList"></div>
+        <button id="retryWrongBtn" class="btn warning full">Retry First Wrong Item</button>
+        <button id="clearWrongBtn" class="btn secondary full">Clear Wrong List</button>
+      </div>
+    </section>
   </div>
 
   <script src="app.js"></script>
