@@ -1,0 +1,303 @@
+:root {
+    --bg: #0f172a;
+    --card: #111827;
+    --card2: #1f2937;
+    --text: #f9fafb;
+    --muted: #9ca3af;
+    --border: #374151;
+    --primary: #2563eb;
+    --success: #16a34a;
+    --warning: #f59e0b;
+    --danger: #dc2626;
+    --secondary: #4b5563;
+    --radius: 18px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.app {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 18px;
+    padding-bottom: 40px;
+}
+
+.header {
+    padding: 20px 4px 14px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 30px;
+    line-height: 1.1;
+}
+
+.subtitle {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 15px;
+}
+
+.screen {
+    display: none;
+}
+
+.screen.active {
+    display: block;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+}
+
+.card h2,
+.card h3 {
+    margin-top: 0;
+}
+
+p {
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+textarea,
+input {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: #020617;
+    color: var(--text);
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 16px;
+    outline: none;
+}
+
+textarea {
+    min-height: 160px;
+    resize: vertical;
+}
+
+input {
+    height: 52px;
+}
+
+textarea:focus,
+input:focus {
+    border-color: var(--primary);
+}
+
+pre {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    background: #020617;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    color: #d1d5db;
+    font-size: 13px;
+}
+
+.btn {
+    width: 100%;
+    border: none;
+    border-radius: 14px;
+    padding: 15px 16px;
+    margin-top: 10px;
+    font-size: 17px;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.primary {
+    background: var(--primary);
+}
+
+.success {
+    background: var(--success);
+}
+
+.warning {
+    background: var(--warning);
+    color: #111827;
+}
+
+.secondary {
+    background: var(--secondary);
+}
+
+.modeBtn {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    text-align: left;
+}
+
+.full {
+    width: 100%;
+}
+
+.actionRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.modeHeader {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.modeHeader h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.backBtn {
+    border: none;
+    background: var(--card2);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.stat {
+    background: #020617;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 8px;
+    text-align: center;
+}
+
+.stat span {
+    display: block;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.stat small {
+    color: var(--muted);
+}
+
+.progress {
+    color: var(--muted);
+    margin-bottom: 12px;
+}
+
+#chainConcept {
+    font-size: 26px;
+    margin-bottom: 14px;
+}
+
+#chainInputs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chainInput {
+    margin: 0;
+}
+
+.feedback {
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 14px;
+    background: #020617;
+    border: 1px solid var(--border);
+    color: var(--text);
+    line-height: 1.5;
+    display: none;
+}
+
+.feedback.show {
+    display: block;
+}
+
+.correct {
+    border-color: var(--success) !important;
+}
+
+.wrong {
+    border-color: var(--danger) !important;
+}
+
+.answerLine {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.questionBox {
+    background: #020617;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 14px;
+}
+
+.questionBox h3 {
+    margin: 0;
+    line-height: 1.4;
+}
+
+.summaryBox {
+    min-height: 260px;
+}
+
+.summaryStats {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media (max-width: 380px) {
+    .app {
+        padding: 14px;
+    }
+
+    .header h1 {
+        font-size: 26px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    .btn {
+        font-size: 16px;
+        padding: 14px;
+    }
+}
